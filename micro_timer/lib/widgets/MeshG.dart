@@ -2,27 +2,25 @@ import 'package:flutter/material.dart';
 import 'package:mesh_gradient/mesh_gradient.dart';
 
 class MeshG extends StatelessWidget {
-  const MeshG({super.key});
+  final double height;
+  final double width;
+  const MeshG({super.key, required this.height, required this.width});
 
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
-
-    final containerWidth = size.width * 0.8;
-    final containerHeight = size.height * 0.8;
-
     return ClipRRect(
       borderRadius: const BorderRadius.all(Radius.circular(25.0)),
       child: SizedBox(
-        height: containerHeight,
-        width: containerWidth,
+        height: height,
+        width: width,
         child: AnimatedMeshGradient(
-          options: AnimatedMeshGradientOptions(),
+          options: AnimatedMeshGradientOptions(
+              speed: 5, amplitude: 10, frequency: 5),
           colors: const [
-            Colors.lime,
-            Colors.yellow,
             Colors.green,
-            Colors.greenAccent,
+            Colors.lightGreenAccent,
+            Colors.amber,
+            Colors.cyan,
           ],
         ),
       ),
