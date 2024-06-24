@@ -24,17 +24,32 @@ class _SoundButtonState extends State<SoundButton> {
     'sounds/yoitrax_ronin.mp3',
   ];
 
+  bool _isPlaying = false;
+  String? _currentSound;
+
   void _playRandomSound() async {
-    final randomIndex = Random().nextInt(_sounds.length);
-    final randomSound = _sounds[randomIndex];
-    await _audioPlayer.play(AssetSource(randomSound), volume: 1.0);
+    if (_isPlaying) {
+      await _audioPlayer.stop();
+      setState(() {
+        _isPlaying = false;
+        _currentSound = null;
+      });
+    } else {
+      final randomIndex = Random().nextInt(_sounds.length);
+      final randomSound = _sounds[randomIndex];
+      await _audioPlayer.play(AssetSource(randomSound), volume: 1.0);
+      setState(() {
+        _isPlaying = true;
+        _currentSound = randomSound;
+      });
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return IconButton(
-      icon: Icon(Icons.volume_up),
-      tooltip: 'Play Random Sound',
+      icon: Icon(_isPlaying ? Icons.stop : Icons.play_arrow),
+      tooltip: _isPlaying ? 'Stop Sound' : 'Play Random Sound',
       onPressed: _playRandomSound,
     );
   }

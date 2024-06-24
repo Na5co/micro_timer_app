@@ -1,27 +1,33 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:hive/hive.dart';
 import '../services/timer_service.dart';
 import '../widgets/timer_display.dart';
 import '../widgets/start_stop_button.dart';
-import '../widgets/MeshG.dart';
+import '../widgets/background_container.dart';
 import '../widgets/glossy_container.dart';
 import '../widgets/quotes_display.dart';
 import '../widgets/sound.dart';
+import '../models/timer_entry.dart';
+import '../widgets/timer_entries.dart';
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
+  final Box<TimerEntry> timerBox;
+
+  const HomeScreen({super.key, required this.timerBox});
 
   @override
   _HomeScreenState createState() => _HomeScreenState();
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  final TimerService _timerService = TimerService();
+  late TimerService _timerService;
   String _time = "00:00:00";
 
   @override
   void initState() {
     super.initState();
+    _timerService = TimerService(widget.timerBox);
     _timerService.timeStream.listen((time) {
       setState(() {
         _time = time;
@@ -56,7 +62,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   child: Stack(
                     alignment: Alignment.center,
                     children: [
-                      MeshG(
+                      GradientBGContainer(
                         height: size.height * 0.2,
                         width: size.width * 0.9,
                       ),
@@ -71,6 +77,9 @@ class _HomeScreenState extends State<HomeScreen> {
                 const SoundButton(),
               ],
             ),
+          ),
+          Expanded(
+            child: EntriesList(timerBox: widget.timerBox),
           ),
           Container(
             padding: const EdgeInsets.all(40),
@@ -99,5 +108,11 @@ class _HomeScreenState extends State<HomeScreen> {
         },
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    _timerService.dispose();
+    super.dispose();
   }
 }
