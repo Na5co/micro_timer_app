@@ -10,6 +10,7 @@ import '../widgets/background/background_container.dart';
 import '../widgets/asset_loaders/sound.dart';
 import '../widgets/asset_loaders/character_animation.dart';
 import '../widgets/level_experience.dart';
+import '../widgets/levelup.dart';
 import '../models/timer_entry.dart';
 import '../models/achievement.dart';
 import '../models/level.dart';
@@ -43,6 +44,7 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     super.initState();
     _initializeServices();
+    _levelService.levelUpNotifier.addListener(_showLevelUpPopup);
   }
 
   void _initializeServices() {
@@ -63,7 +65,6 @@ class _HomeScreenState extends State<HomeScreen> {
     );
 
     if (selectedType != null) {
-      print(selectedType);
       await _timerService.stop(selectedType);
     }
   }
@@ -86,6 +87,17 @@ class _HomeScreenState extends State<HomeScreen> {
       groupValue: null,
       onChanged: (value) => Navigator.of(context).pop(value),
     );
+  }
+
+  void _showLevelUpPopup() {
+    final level = _levelService.levelUpNotifier.value;
+    if (level != null) {
+      showDialog(
+        context: context,
+        builder: (context) => LevelUpPopup(character: level.currentCharacter),
+      );
+      _levelService.levelUpNotifier.value = null;
+    }
   }
 
   @override
@@ -197,6 +209,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void dispose() {
     _timerService.dispose();
+    _levelService.levelUpNotifier.removeListener(_showLevelUpPopup);
     super.dispose();
   }
 }

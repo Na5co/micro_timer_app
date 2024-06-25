@@ -21,7 +21,7 @@ class TimerService {
   bool get isRunning => _isRunning;
 
   void start() {
-    if (_isRunning) return; // Prevent starting if already running
+    if (_isRunning) return;
 
     _isRunning = true;
     _duration = Duration.zero; // Ensure duration is reset at the start

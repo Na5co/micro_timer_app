@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'models/achievement.dart';
 import 'models/timer_entry.dart';
-import 'models/level.dart'; // Import the Level model
+import 'models/level.dart';
 import 'screens/home_screen.dart';
+import 'screens/test_level_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -11,18 +12,15 @@ void main() async {
 
   Hive.registerAdapter(TimerEntryAdapter());
   Hive.registerAdapter(AchievementAdapter());
-  Hive.registerAdapter(LevelAdapter()); // Register the Level adapter
+  Hive.registerAdapter(LevelAdapter());
 
   final timerBox = await Hive.openBox<TimerEntry>('timerEntries');
   final achievementBox = await Hive.openBox<Achievement>('achievements');
   final levelBox = await Hive.openBox<Level>('levels');
 
-  // Initialize the level box if it's empty
   if (levelBox.isEmpty) {
-    await levelBox.put(
-      0,
-      Level(currentLevel: 0, currentExperience: 0, currentCharacter: 'Egg'),
-    );
+    levelBox.put(0,
+        Level(currentLevel: 0, currentExperience: 0, currentCharacter: 'Cell'));
   }
 
   runApp(TimerApp(
@@ -38,11 +36,11 @@ class TimerApp extends StatelessWidget {
   final Box<Level> levelBox;
 
   const TimerApp({
-    Key? key,
+    super.key,
     required this.timerBox,
     required this.achievementBox,
     required this.levelBox,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -53,9 +51,13 @@ class TimerApp extends StatelessWidget {
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
       home: HomeScreen(
-          timerBox: timerBox,
-          achievementBox: achievementBox,
-          levelBox: levelBox),
+        timerBox: timerBox,
+        achievementBox: achievementBox,
+        levelBox: levelBox,
+      ),
+      routes: {
+        '/test': (context) => TestLevelScreen(levelBox: levelBox),
+      },
     );
   }
 }

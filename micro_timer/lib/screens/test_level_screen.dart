@@ -21,8 +21,7 @@ class _TestLevelScreenState extends State<TestLevelScreen> {
   void initState() {
     super.initState();
     _level = widget.levelBox.get(0) ??
-        Level(currentLevel: 0, currentExperience: 0, currentCharacter: 'Egg');
-    widget.levelBox.put(0, _level); // Ensure a default level is available
+        Level(currentLevel: 1, currentExperience: 1, currentCharacter: 'Cell');
   }
 
   void _gainExperience(int points) {
@@ -32,7 +31,7 @@ class _TestLevelScreenState extends State<TestLevelScreen> {
           kExperiencePoints[_level.currentLevel + 1]!) {
         _level.currentExperience -= kExperiencePoints[_level.currentLevel + 1]!;
         _level.currentLevel += 1;
-        _level.currentCharacter = kCharacters[_level.currentLevel] ?? 'Egg';
+        _level.currentCharacter = kCharacters[_level.currentLevel] ?? 'Cell';
       }
       _level.save();
     });
