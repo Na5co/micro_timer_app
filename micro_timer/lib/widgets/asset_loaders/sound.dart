@@ -25,14 +25,12 @@ class _SoundButtonState extends State<SoundButton> {
   ];
 
   bool _isPlaying = false;
-  String? _currentSound;
 
   void _playRandomSound() async {
     if (_isPlaying) {
       await _audioPlayer.stop();
       setState(() {
         _isPlaying = false;
-        _currentSound = null;
       });
     } else {
       final randomIndex = Random().nextInt(_sounds.length);
@@ -40,7 +38,6 @@ class _SoundButtonState extends State<SoundButton> {
       await _audioPlayer.play(AssetSource(randomSound), volume: 1.0);
       setState(() {
         _isPlaying = true;
-        _currentSound = randomSound;
       });
     }
   }

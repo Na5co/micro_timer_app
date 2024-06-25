@@ -55,6 +55,8 @@ class EntriesList extends StatelessWidget {
   }
 
   Icon _getIconForType(String? type) {
+    print('silver');
+    print(type);
     switch (type) {
       case 'work':
         return const Icon(Icons.work, color: Colors.blue);

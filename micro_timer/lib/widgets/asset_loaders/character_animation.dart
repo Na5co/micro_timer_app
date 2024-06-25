@@ -17,7 +17,7 @@ class CharacterAnimation extends StatelessWidget {
   Widget build(BuildContext context) {
     return Center(
       child: Lottie.asset(
-        'assets/animations/${character}.json',
+        'assets/animations/$character.json',
         width: width,
         height: height,
         fit: BoxFit.contain,

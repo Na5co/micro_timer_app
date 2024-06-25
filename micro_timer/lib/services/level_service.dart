@@ -18,7 +18,7 @@ class LevelService {
         level.currentExperience >= kExperiencePoints[level.currentLevel + 1]!) {
       level.currentExperience -= kExperiencePoints[level.currentLevel + 1]!;
       level.currentLevel += 1;
-      level.currentCharacter = kCharacters[level.currentLevel] ?? 'Egg';
+      level.currentCharacter = kCharacters[level.currentLevel] ?? 'Cell';
     }
     level.save();
     _achievementService.checkAndUnlockAchievements(level.currentLevel);

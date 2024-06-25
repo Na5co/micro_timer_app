@@ -17,6 +17,7 @@ void main() async {
   final achievementBox = await Hive.openBox<Achievement>('achievements');
   final levelBox = await Hive.openBox<Level>('levels');
 
+  // Initialize the level box if it's empty
   if (levelBox.isEmpty) {
     await levelBox.put(
       0,

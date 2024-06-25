@@ -11,27 +11,37 @@ class TimerService {
   final _streamController = StreamController<String>.broadcast();
   Timer? _timer;
   Duration _duration = Duration.zero;
+  bool _isRunning = false;
 
   TimerService(this._entryBox, this._levelService);
 
   Stream<String> get timeStream => _streamController.stream;
   Level get currentLevel => _levelService.currentLevel;
 
-  bool get isRunning => _timer?.isActive ?? false;
+  bool get isRunning => _isRunning;
 
   void start() {
+    if (_isRunning) return; // Prevent starting if already running
+
+    _isRunning = true;
+    _duration = Duration.zero; // Ensure duration is reset at the start
     _timer?.cancel();
-    _duration = Duration.zero;
     _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
       _duration += const Duration(seconds: 1);
       _updateTime();
     });
   }
 
-  Future<void> stop() async {
+  Future<void> stop(type) async {
+    if (!_isRunning) return;
+    _isRunning = false;
     _timer?.cancel();
-    await logDurationWithType("default");
-    _levelService.updateExperiencePoints(_duration.inSeconds);
+
+    if (_duration.inSeconds > 0) {
+      await logDurationWithType(type);
+      _levelService.updateExperiencePoints(_duration.inSeconds);
+    }
+
     _duration = Duration.zero;
     _updateTime();
   }
@@ -44,9 +54,8 @@ class TimerService {
       formattedDate,
       type,
     );
+    print('Logging duration: ${entry.durationInSeconds}s');
     await _entryBox.add(entry);
-    print(
-        'Entry added: ${entry.durationInSeconds} seconds, Date: ${entry.formattedDate}, Type: ${entry.type}');
   }
 
   void _updateTime() {

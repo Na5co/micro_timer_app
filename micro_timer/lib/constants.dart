@@ -22,17 +22,32 @@ const List<Color> kGradientColors = [
   Colors.deepPurple,
 ];
 
-// Activity Types
 const List<String> kActivityTypes = ['work', 'exercise', 'study', 'leisure'];
 
 const Map<int, int> kExperiencePoints = {
-  1: 5,
-  2: 6,
-  3: 330,
+  1: 900,
+  2: 7200, // Plank
+  3: 21600, // Cell
+  4: 43200, // BlobFish
+  5: 86400, // Drake
+  6: 93600, // Dumbird
+  7: 93600, // FocusedTurtle
+  8: 93600, // LazyKitten
+  9: 93600, // MindfulSheep
+  10: 93600, // Monkey
+  11: 280800 // Monk
 };
 
 const Map<int, String> kCharacters = {
-  1: 'Egg',
-  2: 'Plank',
-  // 3: 'assets/animations/egg_level3.json',
+  1: 'Cell',
+  2: 'Egg',
+  3: 'Dumbird',
+  4: 'BlobFish',
+  5: 'Drake',
+  6: 'Dumbird',
+  7: 'FocusedTurtle',
+  8: 'LazyKitten',
+  9: 'MindfulSheep',
+  10: 'Monkey',
+  11: 'Monk'
 };

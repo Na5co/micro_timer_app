@@ -63,7 +63,8 @@ class _HomeScreenState extends State<HomeScreen> {
     );
 
     if (selectedType != null) {
-      _timerService.logDurationWithType(selectedType);
+      print(selectedType);
+      await _timerService.stop(selectedType);
     }
   }
 
@@ -187,7 +188,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Future<void> _handleStartStop() async {
     if (_timerService.isRunning) {
-      await _timerService.stop();
       _showActivityTypeDialog();
     } else {
       _timerService.start();
