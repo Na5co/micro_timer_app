@@ -1,28 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hive/hive.dart';
-import 'package:micro_timer/models/achievement.dart';
 import '../services/timer_service.dart';
 import '../services/achievement_service.dart';
 import '../widgets/timer_display.dart';
 import '../widgets/start_stop_button.dart';
 import '../widgets/background_container.dart';
-import '../widgets/glossy_container.dart';
-import '../widgets/quotes_display.dart';
 import '../widgets/sound.dart';
+import '../widgets/character_animation.dart';
 import '../models/timer_entry.dart';
-import '../widgets/timer_entries.dart';
-import '../widgets/achievment.dart';
+import '../models/achievement.dart';
+import 'entries_screen.dart';
+import 'achievement_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   final Box<TimerEntry> timerBox;
   final Box<Achievement> achievementBox;
 
   const HomeScreen({
-    Key? key,
+    super.key,
     required this.timerBox,
     required this.achievementBox,
-  }) : super(key: key);
+  });
 
   @override
   _HomeScreenState createState() => _HomeScreenState();
@@ -101,63 +100,62 @@ class _HomeScreenState extends State<HomeScreen> {
               Navigator.of(context).push(
                 MaterialPageRoute(
                   builder: (context) =>
-                      AchievementsList(achievementBox: widget.achievementBox),
+                      AchievementsScreen(achievementBox: widget.achievementBox),
                 ),
               );
             },
           ),
         ],
       ),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Expanded(
-            child: Column(
+      body: SingleChildScrollView(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            LottieAnimation(
+              width: size.width * 0.5,
+              height: size.height * 0.3,
+            ),
+            SizedBox(height: size.height * 0.05),
+            Stack(
+              alignment: Alignment.center,
               children: [
-                AnimatedOpacity(
-                  opacity: 1.0,
-                  duration: const Duration(seconds: 1),
-                  child: QuotesDisplay(width: size.width),
+                GradientBGContainer(
+                  height: size.height * 0.1,
+                  width: size.width * 0.8,
                 ),
-                SizedBox(height: size.height * 0.08),
-                Center(
-                  child: Stack(
-                    alignment: Alignment.center,
-                    children: [
-                      GradientBGContainer(
-                        height: size.height * 0.2,
-                        width: size.width * 0.9,
-                      ),
-                      GlossMask(
-                        height: size.height * 0.15,
-                        width: size.width * 0.45,
-                      ),
-                      TimerDisplay(time: _time),
-                    ],
-                  ),
-                ),
-                const SoundButton(),
+                TimerDisplay(time: _time),
               ],
             ),
-          ),
-          Expanded(
-            child: EntriesList(timerBox: widget.timerBox),
-          ),
-          Container(
-            padding: const EdgeInsets.all(40),
-            width: double.infinity,
-            child: Text(
-              "Stay focused, stay humble.",
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                color: Colors.green,
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
-                fontFamily: GoogleFonts.lato().fontFamily,
+            SizedBox(height: size.height * 0.05),
+            const SoundButton(),
+            SizedBox(height: size.height * 0.05),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) =>
+                        EntriesScreen(timerBox: widget.timerBox),
+                  ),
+                );
+              },
+              child: const Text('View History'),
+            ),
+            SizedBox(height: size.height * 0.05),
+            Container(
+              padding: EdgeInsets.all(size.width * 0.05),
+              child: Text(
+                "Stay focused, stay humble.",
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  color: Colors.green,
+                  fontSize: size.width * 0.04,
+                  fontWeight: FontWeight.bold,
+                  fontFamily: GoogleFonts.lato().fontFamily,
+                ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
       floatingActionButton: StartStopButton(
         isRunning: _timerService.isRunning,

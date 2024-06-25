@@ -4,8 +4,11 @@ import 'package:mesh_gradient/mesh_gradient.dart';
 class GradientBGContainer extends StatelessWidget {
   final double height;
   final double width;
-  const GradientBGContainer(
-      {super.key, required this.height, required this.width});
+  const GradientBGContainer({
+    super.key,
+    required this.height,
+    required this.width,
+  });
 
   @override
   Widget build(BuildContext context) {

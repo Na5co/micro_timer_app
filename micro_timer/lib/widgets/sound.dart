@@ -48,7 +48,7 @@ class _SoundButtonState extends State<SoundButton> {
   @override
   Widget build(BuildContext context) {
     return IconButton(
-      icon: Icon(_isPlaying ? Icons.stop : Icons.play_arrow),
+      icon: Icon(_isPlaying ? Icons.music_off : Icons.music_note),
       tooltip: _isPlaying ? 'Stop Sound' : 'Play Random Sound',
       onPressed: _playRandomSound,
     );
