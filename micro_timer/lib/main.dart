@@ -1,21 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'screens/home_screen.dart';
-import 'models/timer_entry.dart';
 import 'models/achievement.dart';
+import 'models/timer_entry.dart';
+import 'screens/home_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Hive.initFlutter();
 
-  if (!Hive.isAdapterRegistered(0)) {
-    Hive.registerAdapter(TimerEntryAdapter());
-  }
-
-  if (!Hive.isAdapterRegistered(1)) {
-    Hive.registerAdapter(AchievementAdapter());
-  }
+  Hive.registerAdapter(TimerEntryAdapter());
+  Hive.registerAdapter(AchievementAdapter());
 
   final timerBox = await Hive.openBox<TimerEntry>('timerEntries');
   final achievementBox = await Hive.openBox<Achievement>('achievements');
@@ -27,9 +21,11 @@ class TimerApp extends StatelessWidget {
   final Box<TimerEntry> timerBox;
   final Box<Achievement> achievementBox;
 
-  const TimerApp(
-      {Key? key, required this.timerBox, required this.achievementBox})
-      : super(key: key);
+  const TimerApp({
+    Key? key,
+    required this.timerBox,
+    required this.achievementBox,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -39,10 +35,7 @@ class TimerApp extends StatelessWidget {
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: HomeScreen(
-        timerBox: timerBox,
-        achievementBox: achievementBox,
-      ),
+      home: HomeScreen(timerBox: timerBox, achievementBox: achievementBox),
     );
   }
 }

@@ -45,7 +45,7 @@ class _HomeScreenState extends State<HomeScreen> {
     });
   }
 
-  void _showActivityTypeDialog() async {
+  Future<void> _showActivityTypeDialog() async {
     final List<String> _activityTypes = [
       'work',
       'exercise',
@@ -54,7 +54,7 @@ class _HomeScreenState extends State<HomeScreen> {
     ];
     String? selectedType;
 
-    await showDialog<String>(
+    final value = await showDialog<String>(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
@@ -77,11 +77,11 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         );
       },
-    ).then((value) {
-      if (value != null) {
-        _timerService.logDurationWithType(value);
-      }
-    });
+    );
+
+    if (value != null) {
+      _timerService.logDurationWithType(value);
+    }
   }
 
   @override
@@ -163,7 +163,7 @@ class _HomeScreenState extends State<HomeScreen> {
         isRunning: _timerService.isRunning,
         onPress: () async {
           if (_timerService.isRunning) {
-            _timerService.stop();
+            await _timerService.stop();
             _showActivityTypeDialog();
           } else {
             _timerService.start();

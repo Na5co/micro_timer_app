@@ -6,7 +6,7 @@ import '../models/timer_entry.dart';
 class EntriesList extends StatelessWidget {
   final Box<TimerEntry> timerBox;
 
-  const EntriesList({Key? key, required this.timerBox}) : super(key: key);
+  const EntriesList({super.key, required this.timerBox});
 
   @override
   Widget build(BuildContext context) {
@@ -18,38 +18,36 @@ class EntriesList extends StatelessWidget {
             child: Text('No entries yet.'),
           );
         } else {
-          return SingleChildScrollView(
-            child: Column(
-              children: List.generate(box.values.length, (index) {
-                TimerEntry entry = box.getAt(index)!;
-                return Card(
-                  elevation: 2,
-                  margin:
-                      const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(15),
-                  ),
-                  child: ListTile(
-                    leading: _getIconForType(entry.type),
-                    title: Text(
-                      entry.duration,
-                      style: GoogleFonts.lato(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                      ),
+          return ListView.builder(
+            itemCount: box.values.length,
+            itemBuilder: (context, index) {
+              TimerEntry entry = box.getAt(index)!;
+              return Card(
+                elevation: 2,
+                margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(15),
+                ),
+                child: ListTile(
+                  leading: _getIconForType(entry.type),
+                  title: Text(
+                    entry.duration,
+                    style: GoogleFonts.lato(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
                     ),
-                    subtitle: Text(
-                      entry.formattedDate,
-                      style: GoogleFonts.lato(
-                        fontSize: 14,
-                        fontStyle: FontStyle.italic,
-                      ),
-                    ),
-                    trailing: const Icon(Icons.more_vert),
                   ),
-                );
-              }),
-            ),
+                  subtitle: Text(
+                    entry.formattedDate,
+                    style: GoogleFonts.lato(
+                      fontSize: 14,
+                      fontStyle: FontStyle.italic,
+                    ),
+                  ),
+                  trailing: const Icon(Icons.more_vert),
+                ),
+              );
+            },
           );
         }
       },

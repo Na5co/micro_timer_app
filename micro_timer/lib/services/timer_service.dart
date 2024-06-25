@@ -21,7 +21,6 @@ class TimerService {
   void start() {
     _timer?.cancel();
     _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
-      // Update every second
       _duration += const Duration(seconds: 1);
       _updateTime();
     });
