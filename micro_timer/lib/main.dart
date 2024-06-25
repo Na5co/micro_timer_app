@@ -3,6 +3,7 @@ import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'screens/home_screen.dart';
 import 'models/timer_entry.dart';
+import 'models/achievement.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -12,15 +13,23 @@ void main() async {
     Hive.registerAdapter(TimerEntryAdapter());
   }
 
-  final timerBox = await Hive.openBox<TimerEntry>('timerEntries');
+  if (!Hive.isAdapterRegistered(1)) {
+    Hive.registerAdapter(AchievementAdapter());
+  }
 
-  runApp(TimerApp(timerBox: timerBox));
+  final timerBox = await Hive.openBox<TimerEntry>('timerEntries');
+  final achievementBox = await Hive.openBox<Achievement>('achievements');
+
+  runApp(TimerApp(timerBox: timerBox, achievementBox: achievementBox));
 }
 
 class TimerApp extends StatelessWidget {
   final Box<TimerEntry> timerBox;
+  final Box<Achievement> achievementBox;
 
-  const TimerApp({Key? key, required this.timerBox}) : super(key: key);
+  const TimerApp(
+      {Key? key, required this.timerBox, required this.achievementBox})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -32,6 +41,7 @@ class TimerApp extends StatelessWidget {
       ),
       home: HomeScreen(
         timerBox: timerBox,
+        achievementBox: achievementBox,
       ),
     );
   }

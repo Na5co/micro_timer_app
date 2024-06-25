@@ -2,14 +2,17 @@ import 'dart:async';
 import 'package:hive/hive.dart';
 import 'package:intl/intl.dart';
 import '../models/timer_entry.dart';
+import 'achievement_service.dart';
 
 class TimerService {
   final Box<TimerEntry> _box;
+  final AchievementService _achievementService;
   final _streamController = StreamController<String>.broadcast();
   Timer? _timer;
   Duration _duration = Duration.zero;
+  int _completedPomodoros = 0;
 
-  TimerService(this._box);
+  TimerService(this._box, this._achievementService);
 
   Stream<String> get timeStream => _streamController.stream;
 
@@ -24,11 +27,26 @@ class TimerService {
     });
   }
 
-  Future<void> stop([String? type]) async {
+  Future<void> stop() async {
     _timer?.cancel();
-    await _logDuration(_duration, type);
+    _completedPomodoros++;
+    _achievementService.checkAndUnlockAchievements(_completedPomodoros);
     _duration = Duration.zero;
     _updateTime();
+  }
+
+  Future<void> logDurationWithType(String type) async {
+    String twoDigits(int n) => n.toString().padLeft(2, '0');
+    final now = DateTime.now();
+    final formattedDate = DateFormat('MMMM, dd/yyyy').format(now);
+    final entry = TimerEntry(
+      _duration.inHours > 0
+          ? '${_duration.inHours}:${twoDigits(_duration.inMinutes.remainder(60))}:${twoDigits(_duration.inSeconds.remainder(60))}'
+          : '${twoDigits(_duration.inMinutes.remainder(60))}:${twoDigits(_duration.inSeconds.remainder(60))}',
+      formattedDate,
+      type,
+    );
+    await _box.add(entry);
   }
 
   void _updateTime() {
@@ -37,20 +55,6 @@ class TimerService {
         ? '${twoDigits(_duration.inHours)}:${twoDigits(_duration.inMinutes.remainder(60))}:${twoDigits(_duration.inSeconds.remainder(60))}'
         : '${twoDigits(_duration.inMinutes.remainder(60))}:${twoDigits(_duration.inSeconds.remainder(60))}';
     _streamController.add(formattedTime);
-  }
-
-  Future<void> _logDuration(Duration duration, [String? type]) async {
-    String twoDigits(int n) => n.toString().padLeft(2, '0');
-    final now = DateTime.now();
-    final formattedDate = DateFormat('MMMM, dd/yyyy').format(now);
-    final entry = TimerEntry(
-      duration.inHours > 0
-          ? '${duration.inHours}:${twoDigits(duration.inMinutes.remainder(60))}:${twoDigits(duration.inSeconds.remainder(60))}'
-          : '${twoDigits(duration.inMinutes.remainder(60))}:${twoDigits(duration.inSeconds.remainder(60))}',
-      formattedDate,
-      type, // Log the type
-    );
-    await _box.add(entry);
   }
 
   void dispose() {

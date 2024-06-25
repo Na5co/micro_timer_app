@@ -1,38 +1,38 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'timer_entry.dart';
+part of 'achievement.dart';
 
 // **************************************************************************
 // TypeAdapterGenerator
 // **************************************************************************
 
-class TimerEntryAdapter extends TypeAdapter<TimerEntry> {
+class AchievementAdapter extends TypeAdapter<Achievement> {
   @override
-  final int typeId = 0;
+  final int typeId = 1;
 
   @override
-  TimerEntry read(BinaryReader reader) {
+  Achievement read(BinaryReader reader) {
     final numOfFields = reader.readByte();
     final fields = <int, dynamic>{
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
-    return TimerEntry(
-      fields[0] as String,
-      fields[1] as String,
-      fields[2] as String?,
+    return Achievement(
+      title: fields[0] as String,
+      description: fields[1] as String,
+      achieved: fields[2] as bool,
     );
   }
 
   @override
-  void write(BinaryWriter writer, TimerEntry obj) {
+  void write(BinaryWriter writer, Achievement obj) {
     writer
       ..writeByte(3)
       ..writeByte(0)
-      ..write(obj.duration)
+      ..write(obj.title)
       ..writeByte(1)
-      ..write(obj.formattedDate)
+      ..write(obj.description)
       ..writeByte(2)
-      ..write(obj.type);
+      ..write(obj.achieved);
   }
 
   @override
@@ -41,7 +41,7 @@ class TimerEntryAdapter extends TypeAdapter<TimerEntry> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is TimerEntryAdapter &&
+      other is AchievementAdapter &&
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }
