@@ -180,7 +180,7 @@ class _HomeScreenState extends State<HomeScreen> {
   void _navigateToEntriesScreen() {
     Navigator.of(context).push(
       MaterialPageRoute(
-        builder: (context) => EntriesScreen(timerBox: widget.timerBox),
+        builder: (context) => EntriesList(timerBox: widget.timerBox),
       ),
     );
   }

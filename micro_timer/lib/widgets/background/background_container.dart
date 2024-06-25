@@ -20,7 +20,9 @@ class GradientBGContainer extends StatelessWidget {
         width: width,
         child: AnimatedMeshGradient(
           options: AnimatedMeshGradientOptions(
-            grain: 0.5,
+            amplitude: 7,
+            speed: 7.5,
+            grain: 0.2,
           ),
           colors: kGradientColors,
         ),

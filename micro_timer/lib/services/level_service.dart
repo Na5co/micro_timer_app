@@ -1,7 +1,7 @@
 import 'package:hive/hive.dart';
 import '../models/level.dart';
 import '../constants.dart';
-import 'achievement_service.dart';
+import '../services/achievement_service.dart';
 
 class LevelService {
   final Box<Level> _levelBox;
@@ -14,23 +14,13 @@ class LevelService {
   void updateExperiencePoints(int points) {
     final level = currentLevel;
     level.currentExperience += points;
-    int nextLevelExperience =
-        kExperiencePoints[level.currentLevel + 1] ?? double.maxFinite.toInt();
-
-    while (level.currentExperience >= nextLevelExperience) {
-      level.currentExperience -= nextLevelExperience;
+    while (
+        level.currentExperience >= kExperiencePoints[level.currentLevel + 1]!) {
+      level.currentExperience -= kExperiencePoints[level.currentLevel + 1]!;
       level.currentLevel += 1;
-      level.currentCharacter =
-          kCharacters[level.currentLevel] ?? kCharacters[1]!;
-      nextLevelExperience =
-          kExperiencePoints[level.currentLevel + 1] ?? double.maxFinite.toInt();
+      level.currentCharacter = kCharacters[level.currentLevel] ?? 'Egg';
     }
     level.save();
     _achievementService.checkAndUnlockAchievements(level.currentLevel);
-  }
-
-  int experienceForNextLevel() {
-    final level = currentLevel;
-    return kExperiencePoints[level.currentLevel + 1] ?? 0;
   }
 }

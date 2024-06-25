@@ -21,6 +21,7 @@ class TimerService {
 
   void start() {
     _timer?.cancel();
+    _duration = Duration.zero;
     _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
       _duration += const Duration(seconds: 1);
       _updateTime();
@@ -39,37 +40,21 @@ class TimerService {
     final now = DateTime.now();
     final formattedDate = DateFormat('MMMM, dd/yyyy').format(now);
     final entry = TimerEntry(
-      _formatDuration(_duration),
+      _duration.inSeconds,
       formattedDate,
       type,
     );
     await _entryBox.add(entry);
-    _duration = Duration.zero;
+    print(
+        'Entry added: ${entry.durationInSeconds} seconds, Date: ${entry.formattedDate}, Type: ${entry.type}');
   }
 
   void _updateTime() {
-    _streamController.add(_formatDuration(_duration));
-  }
-
-  String _formatDuration(Duration duration) {
-    String formatDurationPart(int value, String singular, String plural) {
-      return value == 1 ? "$value $singular" : "$value $plural";
-    }
-
-    final hours = duration.inHours;
-    final minutes = duration.inMinutes.remainder(60);
-    final seconds = duration.inSeconds.remainder(60);
-
-    final parts = <String>[];
-    if (hours > 0) parts.add(formatDurationPart(hours, "hour", "hours"));
-    if (minutes > 0) {
-      parts.add(formatDurationPart(minutes, "minute", "minutes"));
-    }
-    if (seconds > 0 || parts.isEmpty) {
-      parts.add(formatDurationPart(seconds, "second", "seconds"));
-    }
-
-    return parts.join(" ");
+    String twoDigits(int n) => n.toString().padLeft(2, '0');
+    final formattedTime = _duration.inHours > 0
+        ? '${twoDigits(_duration.inHours)}:${twoDigits(_duration.inMinutes.remainder(60))}:${twoDigits(_duration.inSeconds.remainder(60))}'
+        : '${twoDigits(_duration.inMinutes.remainder(60))}:${twoDigits(_duration.inSeconds.remainder(60))}';
+    _streamController.add(formattedTime);
   }
 
   void dispose() {

@@ -17,9 +17,9 @@ class TimerEntryAdapter extends TypeAdapter<TimerEntry> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return TimerEntry(
-      fields[0] as String,
+      fields[0] as int,
       fields[1] as String,
-      fields[2] as String?,
+      fields[2] as String,
     );
   }
 
@@ -28,7 +28,7 @@ class TimerEntryAdapter extends TypeAdapter<TimerEntry> {
     writer
       ..writeByte(3)
       ..writeByte(0)
-      ..write(obj.duration)
+      ..write(obj.durationInSeconds)
       ..writeByte(1)
       ..write(obj.formattedDate)
       ..writeByte(2)

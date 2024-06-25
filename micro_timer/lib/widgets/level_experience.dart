@@ -43,7 +43,7 @@ class LevelExperienceWidget extends StatelessWidget {
               color: Colors.amber,
             ),
           ),
-          SizedBox(height: 8),
+          const SizedBox(height: 8),
           Text(
             'Character: ${level.currentCharacter}',
             style: GoogleFonts.poppins(
@@ -52,7 +52,7 @@ class LevelExperienceWidget extends StatelessWidget {
               color: kPrimaryColor,
             ),
           ),
-          SizedBox(height: 16),
+          const SizedBox(height: 16),
           LinearProgressIndicator(
             value: level.currentExperience /
                 kExperiencePoints[level.currentLevel + 1]!,
@@ -60,7 +60,7 @@ class LevelExperienceWidget extends StatelessWidget {
             color: kPrimaryColor,
             minHeight: 8,
           ),
-          SizedBox(height: 8),
+          const SizedBox(height: 8),
           Text(
             'Experience: ${level.currentExperience}/${kExperiencePoints[level.currentLevel + 1]}',
             style: GoogleFonts.poppins(
@@ -69,7 +69,7 @@ class LevelExperienceWidget extends StatelessWidget {
               color: kSecondaryColor,
             ),
           ),
-          SizedBox(height: 16),
+          const SizedBox(height: 16),
           Text(
             'You are now ${level.currentCharacter}. Keep focusing to keep leveling up!',
             textAlign: TextAlign.center,
