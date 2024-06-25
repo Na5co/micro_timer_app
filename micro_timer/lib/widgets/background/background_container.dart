@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mesh_gradient/mesh_gradient.dart';
+import '../../constants.dart'; // Import the constants
 
 class GradientBGContainer extends StatelessWidget {
   final double height;
@@ -19,13 +20,9 @@ class GradientBGContainer extends StatelessWidget {
         width: width,
         child: AnimatedMeshGradient(
           options: AnimatedMeshGradientOptions(
-              speed: 5, amplitude: 10, frequency: 5),
-          colors: const [
-            Colors.pink,
-            Colors.pinkAccent,
-            Colors.lightBlue,
-            Colors.white,
-          ],
+            grain: 0.5,
+          ),
+          colors: kGradientColors,
         ),
       ),
     );

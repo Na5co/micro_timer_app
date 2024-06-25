@@ -12,7 +12,7 @@ class AchievementService {
     if (completedPomodoros >= 10) {
       _unlockAchievement('First 10 Pomodoros', 'Complete 10 Pomodoros');
     }
-    if (completedPomodoros >= 50) {
+    if (completedPomodoros >= 15) {
       _unlockAchievement('Half Century', 'Complete 50 Pomodoros');
     }
     if (completedPomodoros >= 100) {

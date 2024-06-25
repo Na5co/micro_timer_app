@@ -1,20 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 
-class LottieAnimation extends StatelessWidget {
+class CharacterAnimation extends StatelessWidget {
   final double width;
   final double height;
+  final String character;
 
-  const LottieAnimation({super.key, required this.width, required this.height});
+  const CharacterAnimation({
+    super.key,
+    required this.width,
+    required this.height,
+    required this.character,
+  });
 
   @override
   Widget build(BuildContext context) {
     return Center(
       child: Lottie.asset(
-        'assets/animations/egg_level1.json',
+        'assets/animations/${character}.json',
         width: width,
         height: height,
-        fit: BoxFit.cover,
+        fit: BoxFit.contain,
       ),
     );
   }
