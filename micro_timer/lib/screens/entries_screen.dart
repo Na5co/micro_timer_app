@@ -10,47 +10,55 @@ class EntriesList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ValueListenableBuilder(
-      valueListenable: timerBox.listenable(),
-      builder: (context, Box<TimerEntry> box, _) {
-        if (box.values.isEmpty) {
-          return const Center(
-            child: Text('No entries yet.'),
-          );
-        } else {
-          return ListView.builder(
-            itemCount: box.values.length,
-            itemBuilder: (context, index) {
-              TimerEntry entry = box.getAt(index)!;
-              return Card(
-                elevation: 2,
-                margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(15),
-                ),
-                child: ListTile(
-                  leading: _getIconForType(entry.type),
-                  title: Text(
-                    entry.formattedDuration,
-                    style: GoogleFonts.lato(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                    ),
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text("History"),
+      ),
+      body: ValueListenableBuilder(
+        valueListenable: timerBox.listenable(),
+        builder: (context, Box<TimerEntry> box, _) {
+          if (box.values.isEmpty) {
+            return const Scaffold(
+              body: Center(
+                child: Text('No entries yet.'),
+              ),
+            );
+          } else {
+            return ListView.builder(
+              itemCount: box.values.length,
+              itemBuilder: (context, index) {
+                TimerEntry entry = box.getAt(index)!;
+                return Card(
+                  elevation: 2,
+                  margin:
+                      const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(15),
                   ),
-                  subtitle: Text(
-                    entry.formattedDate,
-                    style: GoogleFonts.lato(
-                      fontSize: 14,
-                      fontStyle: FontStyle.italic,
+                  child: ListTile(
+                    leading: _getIconForType(entry.type),
+                    title: Text(
+                      entry.formattedDuration,
+                      style: GoogleFonts.lato(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
+                    subtitle: Text(
+                      entry.formattedDate,
+                      style: GoogleFonts.lato(
+                        fontSize: 14,
+                        fontStyle: FontStyle.italic,
+                      ),
+                    ),
+                    trailing: const Icon(Icons.more_vert),
                   ),
-                  trailing: const Icon(Icons.more_vert),
-                ),
-              );
-            },
-          );
-        }
-      },
+                );
+              },
+            );
+          }
+        },
+      ),
     );
   }
 

@@ -2,8 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hive/hive.dart';
 import '../models/level.dart';
+import '../models/character.dart';
+
 import '../widgets/asset_loaders/character_animation.dart';
 import '../constants.dart';
+import '../characters.dart';
 
 class TestLevelScreen extends StatefulWidget {
   final Box<Level> levelBox;
@@ -28,10 +31,11 @@ class _TestLevelScreenState extends State<TestLevelScreen> {
     setState(() {
       _level.currentExperience += points;
       while (_level.currentExperience >=
-          kExperiencePoints[_level.currentLevel + 1]!) {
-        _level.currentExperience -= kExperiencePoints[_level.currentLevel + 1]!;
+          kCharacters[_level.currentLevel].experiencePoints) {
+        _level.currentExperience -=
+            kCharacters[_level.currentLevel].experiencePoints;
         _level.currentLevel += 1;
-        _level.currentCharacter = kCharacters[_level.currentLevel] ?? 'Cell';
+        _level.currentCharacter = kCharacters[_level.currentLevel].name;
       }
       _level.save();
     });
@@ -39,6 +43,16 @@ class _TestLevelScreenState extends State<TestLevelScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final character = kCharacters.firstWhere(
+      (char) => char.name == _level.currentCharacter,
+      orElse: () => Character(
+        level: 0,
+        name: 'Unknown',
+        experiencePoints: 0,
+        description: 'No character found',
+      ),
+    );
+
     return Scaffold(
       appBar: AppBar(
         title: Text("Test Level Animations", style: GoogleFonts.lato()),
@@ -50,7 +64,7 @@ class _TestLevelScreenState extends State<TestLevelScreen> {
             CharacterAnimation(
               width: 200,
               height: 200,
-              character: _level.currentCharacter,
+              character: character.name,
             ),
             SizedBox(height: 20),
             Text(
@@ -59,12 +73,18 @@ class _TestLevelScreenState extends State<TestLevelScreen> {
                   GoogleFonts.lato(fontSize: 24, fontWeight: FontWeight.bold),
             ),
             Text(
-              'Current Character: ${_level.currentCharacter}',
+              'Current Character: ${character.name}',
               style:
                   GoogleFonts.lato(fontSize: 20, fontWeight: FontWeight.normal),
             ),
             Text(
               'Current Experience: ${_level.currentExperience}',
+              style:
+                  GoogleFonts.lato(fontSize: 16, fontWeight: FontWeight.normal),
+            ),
+            Text(
+              'Description: ${character.description}',
+              textAlign: TextAlign.center,
               style:
                   GoogleFonts.lato(fontSize: 16, fontWeight: FontWeight.normal),
             ),

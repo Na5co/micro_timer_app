@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import '../models/level.dart';
+import '../models/character.dart';
 import '../constants.dart';
+import '../characters.dart';
 import '../services/achievement_service.dart';
 
 class LevelService {
@@ -22,14 +24,27 @@ class LevelService {
     final level = currentLevel;
     level.currentExperience += points;
     bool leveledUp = false;
-    while (
-        level.currentExperience >= kExperiencePoints[level.currentLevel + 1]!) {
-      level.currentExperience -= kExperiencePoints[level.currentLevel + 1]!;
-      level.currentLevel += 1;
-      level.currentCharacter = kCharacters[level.currentLevel] ?? 'Egg';
+    while (true) {
+      final nextLevel = level.currentLevel + 1;
+      final character = kCharacters.firstWhere(
+        (char) => char.level == nextLevel,
+        orElse: () => Character(
+          level: level.currentLevel,
+          name: 'Unknown',
+          experiencePoints: level.currentExperience,
+          description: 'Unknown character',
+        ),
+      );
+      if (level.currentExperience < character.experiencePoints) {
+        break;
+      }
+      level.currentExperience -= character.experiencePoints;
+      level.currentLevel = nextLevel;
+      level.currentCharacter = character.name;
       leveledUp = true;
     }
     level.save();
+
     _achievementService.checkAndUnlockAchievements(level.currentLevel);
 
     if (leveledUp) {

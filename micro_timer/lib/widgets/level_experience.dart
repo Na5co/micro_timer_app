@@ -2,7 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../models/level.dart';
+import '../models/character.dart';
+
 import '../constants.dart';
+import '../characters.dart';
 
 class LevelExperienceWidget extends StatelessWidget {
   final Box<Level> levelBox;
@@ -15,6 +18,16 @@ class LevelExperienceWidget extends StatelessWidget {
     if (level == null) {
       return const Center(child: Text('Level information not found.'));
     }
+
+    final character = kCharacters.firstWhere(
+      (char) => char.level == level.currentLevel,
+      orElse: () => Character(
+        level: 0,
+        name: 'Unknown',
+        experiencePoints: 0,
+        description: 'No character found',
+      ),
+    );
 
     return Container(
       width: MediaQuery.of(context).size.width * 0.9,
@@ -45,7 +58,7 @@ class LevelExperienceWidget extends StatelessWidget {
           ),
           const SizedBox(height: 8),
           Text(
-            'Character: ${level.currentCharacter}',
+            'Character: ${character.name}',
             style: GoogleFonts.poppins(
               fontSize: 22,
               fontWeight: FontWeight.bold,
@@ -55,14 +68,14 @@ class LevelExperienceWidget extends StatelessWidget {
           const SizedBox(height: 16),
           LinearProgressIndicator(
             value: level.currentExperience /
-                kExperiencePoints[level.currentLevel + 1]!,
+                (kCharacters[level.currentLevel].experiencePoints),
             backgroundColor: Colors.grey.shade300,
             color: kPrimaryColor,
             minHeight: 8,
           ),
           const SizedBox(height: 8),
           Text(
-            'Experience: ${level.currentExperience}/${kExperiencePoints[level.currentLevel + 1]}',
+            'Experience: ${level.currentExperience}/${kCharacters[level.currentLevel].experiencePoints}',
             style: GoogleFonts.poppins(
               fontSize: 16,
               fontWeight: FontWeight.normal,
@@ -71,7 +84,7 @@ class LevelExperienceWidget extends StatelessWidget {
           ),
           const SizedBox(height: 16),
           Text(
-            'You are now ${level.currentCharacter}. Keep focusing to keep leveling up!',
+            'You are now ${character.name}. ${character.description}',
             textAlign: TextAlign.center,
             style: GoogleFonts.poppins(
               fontSize: 14,

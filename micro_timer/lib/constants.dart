@@ -25,42 +25,49 @@ const List<Color> kGradientColors = [
 const List<String> kActivityTypes = ['work', 'exercise', 'study', 'leisure'];
 
 // const Map<int, int> kExperiencePoints = {
-//   1: 900,
-//   2: 7200, // Plank
-//   3: 21600, // Cell
-//   4: 43200, // BlobFish
-//   5: 86400, // Drake
-//   6: 93600, // Dumbird
-//   7: 93600, // FocusedTurtle
-//   8: 93600, // LazyKitten
-//   9: 93600, // MindfulSheep
-//   10: 93600, // Monkey
-//   11: 280800 // Monk
+//   1: 2700, // Cell
+//   2: 3600, // Egg
+//   3: 3600, // Plank
+//   4: 7200, // Bomb
+//   5: 14400, // Boxy
+//   6: 28800, //  KittyBlob
+//   7: 28800, // Bomb
+//   8: 28800, // Mouse
+//   9: 36000, // Rooster
+//   10: 36000, // Fox
+//   11: 36000, // Monkey
+//   12: 46000, // Alien
+//   13: 128000 // Octorobo
 // };
-const Map<int, int> kExperiencePoints = {
-  1: 2,
-  2: 2, // Plank
-  3: 2, // Cell
-  4: 2, // BlobFish
-  5: 2, // Drake
-  6: 2, // Dumbird
-  7: 2, // FocusedTurtle
-  8: 2, // LazyKitten
-  9: 2, // MindfulSheep
-  10: 2, // Monkey
-  11: 2 // Monk
-};
 
-const Map<int, String> kCharacters = {
-  1: 'Cell',
-  2: 'Egg',
-  3: 'BlobFish',
-  4: 'Dumbird',
-  5: 'LazyKitten',
-  6: 'LazyKitten',
-  7: 'MindfulSheep',
-  8: 'Drake',
-  9: 'FocusedTurtle',
-  10: 'Fox',
-  11: 'Monk'
-};
+// const Map<int, int> kExperiencePoints = {
+//   1: 2, // Cell
+//   2: 2, // Egg
+//   3: 2, // Plank
+//   4: 2, // Bomb
+//   5: 2, // Boxy
+//   6: 2, //  KittyBlob
+//   7: 2, // Bomb
+//   8: 2, // Mouse
+//   9: 2, // Rooster
+//   10: 2, // Fox
+//   11: 2, // Monkey
+//   12: 2, // Alien
+//   13: 2 // Octorobo
+// };
+
+// const Map<int, String> kCharacters = {
+//   1: "Cell",
+//   2: "Egg",
+//   3: "Plank",
+//   4: "Bomb",
+//   5: "Boxy",
+//   6: "Kittyblob",
+//   7: "Mouse",
+//   8: "Rooster",
+//   9: "Fox",
+//   10: "Monkey",
+//   11: "Alien",
+//   12: "Octorobo",
+//   13: "Monk"
+// };
