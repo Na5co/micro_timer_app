@@ -6,7 +6,7 @@ List<Character> kCharacters = [
     name: "Cell",
     description:
         "A small but important building block of life, needs to focus more on growth.",
-    experiencePoints: 900,
+    experiencePoints: 300,
   ),
   Character(
     level: 2,

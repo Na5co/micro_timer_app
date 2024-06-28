@@ -47,9 +47,10 @@ class _TestLevelScreenState extends State<TestLevelScreen> {
       (char) => char.name == _level.currentCharacter,
       orElse: () => Character(
         level: 0,
-        name: 'Unknown',
+        name: 'Spark',
         experiencePoints: 0,
-        description: 'No character found',
+        description:
+            'You are just a Spark. A chance to grow into a new life ahead.',
       ),
     );
 
