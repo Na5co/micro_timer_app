@@ -16,10 +16,10 @@ const Color kTextColor = Colors.white;
 
 // Gradient Colors
 const List<Color> kGradientColors = [
-  Colors.red,
-  Colors.redAccent,
-  Colors.lime,
-  Colors.limeAccent,
+  Colors.white,
+  Colors.purpleAccent,
+  Colors.pinkAccent,
+  Colors.pinkAccent,
 ];
 
 const List<String> kActivityTypes = ['work', 'exercise', 'study', 'leisure'];

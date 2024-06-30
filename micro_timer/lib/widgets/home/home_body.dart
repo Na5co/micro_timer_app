@@ -24,18 +24,46 @@ class HomeBody extends StatelessWidget {
     final size = MediaQuery.of(context).size;
     return SingleChildScrollView(
       child: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 30.0),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            CharacterDisplay(
-              size: size,
-              character: levelService.currentLevel.currentCharacter,
-            ),
+            _buildCharacterCard(size),
+            const SizedBox(height: 24),
             TimerDisplayContainer(size: size, time: time),
-            const SoundButton(),
+            const SizedBox(height: 16),
+            const Center(child: SoundButton()),
+            const SizedBox(height: 24),
             LevelExperienceWidget(levelBox: levelBox),
           ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildCharacterCard(Size size) {
+    return Card(
+      elevation: 0.5,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(20),
+      ),
+      child: Container(
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(20),
+          gradient: LinearGradient(
+            colors: [
+              Colors.pinkAccent.withOpacity(0.51),
+              Colors.white.withOpacity(0.02)
+            ],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
+        ),
+        child: CharacterDisplay(
+          size: size,
+          character: levelService.currentLevel.currentCharacter,
         ),
       ),
     );

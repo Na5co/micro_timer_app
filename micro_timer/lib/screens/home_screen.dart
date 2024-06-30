@@ -22,12 +22,12 @@ class HomeScreen extends StatefulWidget {
   final bool showOnboarding;
 
   const HomeScreen({
-    super.key,
+    Key? key,
     required this.timerBox,
     required this.achievementBox,
     required this.levelBox,
     this.showOnboarding = false,
-  });
+  }) : super(key: key);
 
   @override
   _HomeScreenState createState() => _HomeScreenState();
@@ -71,8 +71,10 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget _buildActivityTypeDialog(List<String> activityTypes) {
     return AlertDialog(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-      title: Text('Select Activity Type',
-          style: GoogleFonts.lato(fontWeight: FontWeight.bold)),
+      title: Text(
+        'Select Activity Type',
+        style: GoogleFonts.poppins(fontWeight: FontWeight.bold),
+      ),
       content: Column(
         mainAxisSize: MainAxisSize.min,
         children:
@@ -83,7 +85,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Widget _buildRadioListTile(String type) {
     return RadioListTile<String>(
-      title: Text(type, style: GoogleFonts.lato()),
+      title: Text(type, style: GoogleFonts.poppins()),
       value: type,
       groupValue: null,
       onChanged: (value) => Navigator.of(context).pop(value),
