@@ -13,11 +13,11 @@ class HomeBody extends StatelessWidget {
   final LevelService levelService;
 
   const HomeBody({
-    Key? key,
+    super.key,
     required this.time,
     required this.levelBox,
     required this.levelService,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

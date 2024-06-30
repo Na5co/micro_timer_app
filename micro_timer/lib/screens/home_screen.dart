@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
+import 'package:google_fonts/google_fonts.dart';
 import '../services/timer_service.dart';
 import '../services/achievement_service.dart';
 import '../services/level_service.dart';
@@ -18,12 +19,14 @@ class HomeScreen extends StatefulWidget {
   final Box<TimerEntry> timerBox;
   final Box<Achievement> achievementBox;
   final Box<Level> levelBox;
+  final bool showOnboarding;
 
   const HomeScreen({
     super.key,
     required this.timerBox,
     required this.achievementBox,
     required this.levelBox,
+    this.showOnboarding = false,
   });
 
   @override
@@ -67,7 +70,9 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Widget _buildActivityTypeDialog(List<String> activityTypes) {
     return AlertDialog(
-      title: const Text('Select Activity Type'),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+      title: Text('Select Activity Type',
+          style: GoogleFonts.lato(fontWeight: FontWeight.bold)),
       content: Column(
         mainAxisSize: MainAxisSize.min,
         children:
@@ -78,7 +83,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Widget _buildRadioListTile(String type) {
     return RadioListTile<String>(
-      title: Text(type),
+      title: Text(type, style: GoogleFonts.lato()),
       value: type,
       groupValue: null,
       onChanged: (value) => Navigator.of(context).pop(value),
@@ -99,18 +104,42 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      extendBodyBehindAppBar: true,
       appBar: HomeAppBar(
         onAchievementsPressed: _navigateToAchievementsScreen,
         onHistoryPressed: _navigateToEntriesScreen,
       ),
-      body: HomeBody(
-        time: _time,
-        levelBox: widget.levelBox,
-        levelService: _levelService,
-      ),
-      floatingActionButton: StartStopButton(
-        isRunning: _timerService.isRunning,
-        onPress: _handleStartStop,
+      body: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [Colors.blue.shade100, Colors.purple.shade100],
+          ),
+        ),
+        child: SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Expanded(
+                  child: HomeBody(
+                    time: _time,
+                    levelBox: widget.levelBox,
+                    levelService: _levelService,
+                  ),
+                ),
+                const SizedBox(height: 24),
+                StartStopButton(
+                  isRunning: _timerService.isRunning,
+                  onPress: _handleStartStop,
+                ),
+                const SizedBox(height: 24),
+              ],
+            ),
+          ),
+        ),
       ),
     );
   }

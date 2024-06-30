@@ -6,10 +6,10 @@ class CharacterDisplay extends StatelessWidget {
   final String character;
 
   const CharacterDisplay({
-    Key? key,
+    super.key,
     required this.size,
     required this.character,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
