@@ -8,17 +8,17 @@ class TimerDisplayContainer extends StatelessWidget {
   final Key timerKey;
 
   const TimerDisplayContainer({
-    Key? key,
+    super.key,
     required this.size,
     required this.time,
     required this.timerKey,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
+    return SizedBox(
       key: timerKey,
-      padding: const EdgeInsets.symmetric(vertical: 16.0),
+      height: size.height * 0.15,
       child: Stack(
         alignment: Alignment.center,
         children: [

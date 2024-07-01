@@ -28,6 +28,7 @@ dependencies:
   onboarding_overlay: ^3.2.2
   tutorial_coach_mark: ^1.2.11
   shared_preferences: ^2.2.3
+  just_audio: ^0.9.38
 
 dev_dependencies:
   flutter_test:

@@ -21,7 +21,7 @@ class _StartStopButtonState extends State<StartStopButton> {
       onPressed: widget.onPress,
       backgroundColor: widget.isRunning ? Colors.red : Colors.green,
       child: AnimatedSwitcher(
-        duration: Duration(milliseconds: 300),
+        duration: const Duration(milliseconds: 1),
         transitionBuilder: (Widget child, Animation<double> animation) {
           return ScaleTransition(scale: animation, child: child);
         },

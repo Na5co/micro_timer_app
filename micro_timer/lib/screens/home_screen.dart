@@ -1,15 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
-import 'package:google_fonts/google_fonts.dart';
 import '../services/timer_service.dart';
 import '../services/achievement_service.dart';
 import '../services/level_service.dart';
-import '../widgets/start_stop_button.dart';
 import '../services/onboarding_service.dart';
-
+import '../widgets/start_stop_button.dart';
 import '../widgets/levelup.dart';
 import '../widgets/home/home_app_bar.dart';
 import '../widgets/home/home_body.dart';
+import '../widgets/asset_loaders/sound.dart';
 import '../models/timer_entry.dart';
 import '../models/achievement.dart';
 import '../models/level.dart';
@@ -80,52 +79,6 @@ class _HomeScreenState extends State<HomeScreen> {
     });
   }
 
-  void _showLevelUpPopup() {
-    final level = _levelService.levelUpNotifier.value;
-    if (level != null) {
-      showDialog(
-        context: context,
-        builder: (context) => LevelUpPopup(character: level.currentCharacter),
-      );
-      _levelService.levelUpNotifier.value = null;
-    }
-  }
-
-  Future<void> _showActivityTypeDialog() async {
-    final selectedType = await showDialog<String>(
-      context: context,
-      builder: (context) => _buildActivityTypeDialog(kActivityTypes),
-    );
-
-    if (selectedType != null) {
-      await _timerService.stop(selectedType);
-    }
-  }
-
-  Widget _buildActivityTypeDialog(List<String> activityTypes) {
-    return AlertDialog(
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-      title: Text(
-        'Select Activity Type',
-        style: GoogleFonts.poppins(fontWeight: FontWeight.bold),
-      ),
-      content: Column(
-        mainAxisSize: MainAxisSize.min,
-        children:
-            activityTypes.map((type) => _buildRadioListTile(type)).toList(),
-      ),
-    );
-  }
-
-  Widget _buildRadioListTile(String type) {
-    return RadioListTile<String>(
-      title: Text(type, style: GoogleFonts.poppins()),
-      value: type,
-      groupValue: null,
-      onChanged: (value) => Navigator.of(context).pop(value),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -133,6 +86,9 @@ class _HomeScreenState extends State<HomeScreen> {
       appBar: HomeAppBar(
         onAchievementsPressed: _navigateToAchievementsScreen,
         onHistoryPressed: _navigateToEntriesScreen,
+        actions: [
+          const SoundButton(),
+        ],
       ),
       body: Stack(
         children: [
@@ -147,7 +103,7 @@ class _HomeScreenState extends State<HomeScreen> {
             child: SafeArea(
               child: Padding(
                 padding:
-                    const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+                    const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
@@ -161,12 +117,12 @@ class _HomeScreenState extends State<HomeScreen> {
                         experienceBarKey: _experienceBarKey,
                       ),
                     ),
-                    const SizedBox(height: 24),
+                    const SizedBox(height: 16),
                     StartStopButton(
                       isRunning: _timerService.isRunning,
                       onPress: _handleStartStop,
                     ),
-                    const SizedBox(height: 24),
+                    const SizedBox(height: 16),
                   ],
                 ),
               ),
@@ -217,9 +173,47 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Future<void> _handleStartStop() async {
     if (_timerService.isRunning) {
-      _showActivityTypeDialog();
+      await _showActivityTypeDialog();
     } else {
       _timerService.start();
+    }
+  }
+
+  Future<void> _showActivityTypeDialog() async {
+    final selectedType = await showDialog<String>(
+      context: context,
+      builder: (context) => _buildActivityTypeDialog(kActivityTypes),
+    );
+
+    if (selectedType != null) {
+      await _timerService.stop(selectedType);
+    }
+  }
+
+  Widget _buildActivityTypeDialog(List<String> activityTypes) {
+    // Implement your activity type dialog here
+    return AlertDialog(
+      title: const Text('Select Activity Type'),
+      content: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: activityTypes
+            .map((type) => ListTile(
+                  title: Text(type),
+                  onTap: () => Navigator.of(context).pop(type),
+                ))
+            .toList(),
+      ),
+    );
+  }
+
+  void _showLevelUpPopup() {
+    final level = _levelService.levelUpNotifier.value;
+    if (level != null) {
+      showDialog(
+        context: context,
+        builder: (context) => LevelUpPopup(character: level.currentCharacter),
+      );
+      _levelService.levelUpNotifier.value = null;
     }
   }
 

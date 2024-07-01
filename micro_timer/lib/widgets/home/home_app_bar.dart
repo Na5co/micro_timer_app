@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:micro_timer/widgets/asset_loaders/sound.dart';
 
 class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
   final VoidCallback onAchievementsPressed;
@@ -9,6 +10,7 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
     Key? key,
     required this.onAchievementsPressed,
     required this.onHistoryPressed,
+    required List<SoundButton> actions,
   }) : super(key: key);
 
   @override
