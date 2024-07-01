@@ -27,6 +27,7 @@ dependencies:
   flutter_launcher_icons: ^0.13.1
   onboarding_overlay: ^3.2.2
   tutorial_coach_mark: ^1.2.11
+  shared_preferences: ^2.2.3
 
 dev_dependencies:
   flutter_test:

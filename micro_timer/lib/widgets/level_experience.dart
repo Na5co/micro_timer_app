@@ -8,9 +8,13 @@ import '../characters.dart';
 
 class LevelExperienceWidget extends StatelessWidget {
   final Box<Level> levelBox;
+  final Key experienceBarKey;
 
-  const LevelExperienceWidget({Key? key, required this.levelBox})
-      : super(key: key);
+  const LevelExperienceWidget({
+    Key? key,
+    required this.levelBox,
+    required this.experienceBarKey,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -30,6 +34,7 @@ class LevelExperienceWidget extends StatelessWidget {
     );
 
     return Container(
+      key: experienceBarKey,
       width: double.infinity,
       padding: const EdgeInsets.all(24.0),
       decoration: BoxDecoration(
