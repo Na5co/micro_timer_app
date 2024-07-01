@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../models/level.dart';
-import '../models/character.dart';
 import '../constants.dart';
 import '../characters.dart';
 
@@ -23,15 +22,17 @@ class LevelExperienceWidget extends StatelessWidget {
       return const Center(child: Text('Level information not found.'));
     }
 
-    final character = kCharacters.firstWhere(
-      (char) => char.level == level.currentLevel,
-      orElse: () => Character(
-        level: 0,
-        name: 'Unknown',
-        experiencePoints: 0,
-        description: 'No character found',
-      ),
-    );
+    final currentCharacter = kCharacters[level.currentLevel];
+    final nextCharacter = level.currentLevel < kCharacters.length - 1
+        ? kCharacters[level.currentLevel + 1]
+        : kCharacters.last;
+
+    final totalXPForNextLevel =
+        nextCharacter.experiencePoints - currentCharacter.experiencePoints;
+    final currentXPProgress =
+        level.currentExperience - currentCharacter.experiencePoints;
+    final progressFraction =
+        totalXPForNextLevel > 0 ? currentXPProgress / totalXPForNextLevel : 0.0;
 
     return Container(
       key: experienceBarKey,
@@ -78,7 +79,7 @@ class LevelExperienceWidget extends StatelessWidget {
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: Text(
-                  character.name,
+                  currentCharacter.name,
                   style: GoogleFonts.poppins(
                     fontSize: 14,
                     fontWeight: FontWeight.w600,
@@ -108,8 +109,7 @@ class LevelExperienceWidget extends StatelessWidget {
                 ),
               ),
               FractionallySizedBox(
-                widthFactor: level.currentExperience /
-                    kCharacters[level.currentLevel].experiencePoints,
+                widthFactor: progressFraction.clamp(0.0, 1.0),
                 child: Container(
                   height: 6,
                   decoration: BoxDecoration(
@@ -124,7 +124,7 @@ class LevelExperienceWidget extends StatelessWidget {
           ),
           const SizedBox(height: 4),
           Text(
-            '${level.currentExperience}/${kCharacters[level.currentLevel].experiencePoints} XP',
+            '$currentXPProgress/$totalXPForNextLevel XP',
             style: GoogleFonts.poppins(
               fontSize: 10,
               fontWeight: FontWeight.w500,

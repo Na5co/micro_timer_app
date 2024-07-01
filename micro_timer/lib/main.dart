@@ -4,7 +4,6 @@ import 'models/achievement.dart';
 import 'models/timer_entry.dart';
 import 'models/level.dart';
 import 'screens/home_screen.dart';
-import 'screens/test_level_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -19,8 +18,14 @@ void main() async {
   final levelBox = await Hive.openBox<Level>('levels');
 
   if (levelBox.isEmpty) {
-    levelBox.put(0,
-        Level(currentLevel: 0, currentExperience: 0, currentCharacter: 'Cell'));
+    levelBox.put(
+      0,
+      Level(
+        currentLevel: 0,
+        currentExperience: 0,
+        currentCharacter: 'Spark',
+      ),
+    );
   }
 
   runApp(TimerApp(
@@ -55,9 +60,6 @@ class TimerApp extends StatelessWidget {
         achievementBox: achievementBox,
         levelBox: levelBox,
       ),
-      routes: {
-        '/test': (context) => TestLevelScreen(levelBox: levelBox),
-      },
     );
   }
 }

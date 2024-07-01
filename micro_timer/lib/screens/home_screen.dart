@@ -4,7 +4,6 @@ import '../services/timer_service.dart';
 import '../services/achievement_service.dart';
 import '../services/level_service.dart';
 import '../services/onboarding_service.dart';
-import '../widgets/start_stop_button.dart';
 import '../widgets/levelup.dart';
 import '../widgets/home/home_app_bar.dart';
 import '../widgets/home/home_body.dart';
@@ -36,8 +35,9 @@ class _HomeScreenState extends State<HomeScreen> {
   late final TimerService _timerService;
   late final AchievementService _achievementService;
   late final LevelService _levelService;
-  String _time = "00:00:00";
+  String _time = "25:00";
   bool _showOnboarding = false;
+  PomodoroState _currentState = PomodoroState.focus;
 
   final GlobalKey _characterKey = GlobalKey();
   final GlobalKey _timerKey = GlobalKey();
@@ -56,10 +56,15 @@ class _HomeScreenState extends State<HomeScreen> {
     _levelService = LevelService(widget.levelBox, _achievementService);
     _timerService = TimerService(widget.timerBox, _levelService);
     _timerService.timeStream.listen(_updateTime);
+    _timerService.stateStream.listen(_updateState);
   }
 
   void _updateTime(String time) {
     setState(() => _time = time);
+  }
+
+  void _updateState(PomodoroState state) {
+    setState(() => _currentState = state);
   }
 
   Future<void> _checkOnboarding() async {
@@ -110,6 +115,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     Expanded(
                       child: HomeBody(
                         time: _time,
+                        pomodoroState: _currentState,
                         levelBox: widget.levelBox,
                         levelService: _levelService,
                         characterKey: _characterKey,
@@ -118,11 +124,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                     ),
                     const SizedBox(height: 16),
-                    StartStopButton(
-                      isRunning: _timerService.isRunning,
-                      onPress: _handleStartStop,
-                    ),
-                    const SizedBox(height: 16),
+                    _buildControlButtons(),
                   ],
                 ),
               ),
@@ -138,12 +140,12 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
                 OnboardingStep(
                   message:
-                      "This is the timer. Start it when you begin focusing, and stop it when you're done.",
+                      "This is the timer. It follows the Pomodoro technique to help you focus!",
                   targetKey: _timerKey,
                 ),
                 OnboardingStep(
                   message:
-                      "This is your experience bar. As you focus, you'll gain experience and level up!",
+                      "This is your experience bar. As you complete work sessions, you'll gain experience and level up!",
                   targetKey: _experienceBarKey,
                 ),
               ],
@@ -171,39 +173,74 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Future<void> _handleStartStop() async {
+  Widget _buildControlButtons() {
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final buttonSize = constraints.maxWidth * 0.15;
+        return Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            _buildControlButton(
+              onPressed: _timerService.skipCurrentSession,
+              icon: Icons.skip_next,
+              color: Colors.orange.withOpacity(0.2),
+              size: buttonSize,
+            ),
+            SizedBox(width: constraints.maxWidth * 0.05),
+            _buildControlButton(
+              onPressed: _handleStartStop,
+              icon: _timerService.isRunning ? Icons.stop : Icons.play_arrow,
+              color: _timerService.isRunning
+                  ? Colors.red.withOpacity(0.4)
+                  : Colors.green.withOpacity(0.4),
+              size: buttonSize,
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Widget _buildControlButton({
+    required VoidCallback onPressed,
+    required IconData icon,
+    required Color color,
+    required double size,
+  }) {
+    return Material(
+      elevation: 5,
+      shape: const CircleBorder(),
+      color: color,
+      child: InkWell(
+        onTap: onPressed,
+        customBorder: const CircleBorder(),
+        child: Container(
+          width: size,
+          height: size,
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            gradient: LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+              colors: [color.withOpacity(0.8), color],
+            ),
+          ),
+          child: Icon(
+            icon,
+            size: size * 0.6,
+            color: Colors.white,
+          ),
+        ),
+      ),
+    );
+  }
+
+  void _handleStartStop() {
     if (_timerService.isRunning) {
-      await _showActivityTypeDialog();
+      _timerService.stop();
     } else {
       _timerService.start();
     }
-  }
-
-  Future<void> _showActivityTypeDialog() async {
-    final selectedType = await showDialog<String>(
-      context: context,
-      builder: (context) => _buildActivityTypeDialog(kActivityTypes),
-    );
-
-    if (selectedType != null) {
-      await _timerService.stop(selectedType);
-    }
-  }
-
-  Widget _buildActivityTypeDialog(List<String> activityTypes) {
-    // Implement your activity type dialog here
-    return AlertDialog(
-      title: const Text('Select Activity Type'),
-      content: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: activityTypes
-            .map((type) => ListTile(
-                  title: Text(type),
-                  onTap: () => Navigator.of(context).pop(type),
-                ))
-            .toList(),
-      ),
-    );
   }
 
   void _showLevelUpPopup() {

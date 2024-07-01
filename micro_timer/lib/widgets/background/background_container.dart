@@ -40,7 +40,7 @@ class GradientBGContainer extends StatelessWidget {
                 child: AnimatedMeshGradient(
                   options: AnimatedMeshGradientOptions(
                     amplitude: 10,
-                    speed: 5,
+                    speed: 1.5,
                     grain: 0.2,
                   ),
                   colors: kGradientColors,
@@ -48,7 +48,7 @@ class GradientBGContainer extends StatelessWidget {
               ),
               Positioned.fill(
                 child: Container(
-                  color: Colors.white.withOpacity(0.3),
+                  color: Colors.white.withOpacity(0.35),
                 ),
               ),
               if (child != null) Positioned.fill(child: child!),

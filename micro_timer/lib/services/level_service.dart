@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import '../models/level.dart';
 import '../models/character.dart';
-import '../constants.dart';
 import '../characters.dart';
 import '../services/achievement_service.dart';
 
@@ -12,11 +11,23 @@ class LevelService {
   late final ValueNotifier<Level?> _levelUpNotifier =
       ValueNotifier<Level?>(null);
 
-  LevelService(this._levelBox, this._achievementService);
+  LevelService(this._levelBox, this._achievementService) {
+    _initializeLevel();
+  }
 
-  Level get currentLevel =>
-      _levelBox.get(0) ??
-      Level(currentExperience: 0, currentLevel: 0, currentCharacter: 'Egg');
+  void _initializeLevel() {
+    if (_levelBox.isEmpty) {
+      final initialCharacter = kCharacters.first;
+      final initialLevel = Level(
+        currentLevel: 0,
+        currentExperience: 0,
+        currentCharacter: initialCharacter.name,
+      );
+      _levelBox.put(0, initialLevel);
+    }
+  }
+
+  Level get currentLevel => _levelBox.get(0)!;
 
   ValueNotifier<Level?> get levelUpNotifier => _levelUpNotifier;
 
@@ -24,23 +35,10 @@ class LevelService {
     final level = currentLevel;
     level.currentExperience += points;
     bool leveledUp = false;
-    while (true) {
-      final nextLevel = level.currentLevel + 1;
-      final character = kCharacters.firstWhere(
-        (char) => char.level == nextLevel,
-        orElse: () => Character(
-          level: level.currentLevel,
-          name: 'Unknown',
-          experiencePoints: level.currentExperience,
-          description: 'Unknown character',
-        ),
-      );
-      if (level.currentExperience < character.experiencePoints) {
-        break;
-      }
-      level.currentExperience -= character.experiencePoints;
-      level.currentLevel = nextLevel;
-      level.currentCharacter = character.name;
+    while (level.currentExperience >=
+        kCharacters[level.currentLevel + 1].experiencePoints) {
+      level.currentLevel++;
+      level.currentCharacter = kCharacters[level.currentLevel].name;
       leveledUp = true;
     }
     level.save();

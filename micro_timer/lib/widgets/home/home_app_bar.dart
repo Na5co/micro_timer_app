@@ -16,9 +16,8 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      title: Text("Pomodo Samurai", style: GoogleFonts.lato()),
+      title: Text("Pomodomon", style: GoogleFonts.lato()),
       backgroundColor: Colors.transparent,
-      elevation: 0,
       centerTitle: true,
       actions: [
         IconButton(
